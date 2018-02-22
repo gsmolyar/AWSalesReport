@@ -1,0 +1,44 @@
+﻿
+.btn {
+	border-radius: 20px;
+}
+
+.btn-primary {
+  color: brown;
+  background-color: blanchedalmond;
+  border-color: burlywood;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open .dropdown-toggle.btn-primary {
+  color: black;
+  background-color: aquamarine;
+  border-color: brown;
+}
+
+.jumbotron p {
+  line-height: 1.4;
+}
+.jumbotron {
+  padding: 30px;
+  margin-bottom: 30px;
+  font-size: 21px;
+  font-weight: 200;
+  line-height: 2.1428571435;
+  color: inherit;
+  background-color: aliceblue;
+}
+
+.jumbotron h1 {
+  line-height: 1;
+  color: inherit;
+}
+
+.panel-heading {
+  color: #000000;
+  background-color: blanchedalmond;
+  border-color: #dddddd;
+}

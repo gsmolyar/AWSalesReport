@@ -1,0 +1,201 @@
+﻿@{
+    ViewBag.Title = "AdventureWorks Sales Report - Home";
+}
+
+<div class="jumbotron">
+    <h2 class="text-center">AdventureWorks Sales Report</h2>
+    <h3 class="text-center" >Sales Orders</h3>
+<!--    <p><a href="http://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>-->
+</div>
+
+<div ng-app="app"
+     ng-controller="OrderController as vm">
+  <form name="orderSearchForm" novalidate>
+    <!-- ** BEGIN SEARCH AREA ** -->
+    <div ng-show="vm.uiState.isSearchAreaVisible" class="panel panel-primary">
+      <div class="panel-heading">
+        <h1 class="panel-title">Sales Order Search</h1>
+      </div>
+      <div class="panel-body">
+        <div class="form-group">
+          <label for="searchCustomerName">Customer Name</label>
+          <input type="text" class="form-control" ng-model="vm.searchInput.customerName" />
+        </div>
+        <div class="form-group">
+            <div class="row">
+              <div class="col-sm-6 text-center"><label for="searchOrderDateFrom">From</label></div>
+              <div class="col-sm-6 text-center"><label for="searchOrderDateTo">To</label></div>
+            </div>
+            <label for="searchOrderDate">Order Date</label>
+            <div class="row">
+              <div class="col-sm-6">          
+                <input type="text" class="form-control datepicker" ng-model="vm.searchInput.orderDateFrom" />
+              </div>
+              <div class="col-sm-6">          
+                <input type="text" class="form-control datepicker" ng-model="vm.searchInput.orderDateTo" />
+              </div>
+            </div>
+            <label for="searchOrderDate">Due Date</label>
+            <div class="row">
+              <div class="col-sm-6">          
+                <input type="text" class="form-control datepicker" ng-model="vm.searchInput.dueDateFrom" />
+              </div>
+              <div class="col-sm-6">          
+                <input type="text" class="form-control datepicker" ng-model="vm.searchInput.dueDateTo" />
+              </div>
+            </div>
+            <label for="searchOrderDate">Ship Date</label>
+            <div class="row">
+              <div class="col-sm-6">          
+                <input type="text" class="form-control datepicker" ng-model="vm.searchInput.shipDateFrom" />
+              </div>
+              <div class="col-sm-6">          
+                <input type="text" class="form-control datepicker" ng-model="vm.searchInput.shipDateTo" />
+              </div>
+            </div>
+<!--            <label>{{vm.test}}</label>-->
+        </div>
+      </div>
+      <div class="panel-footer">
+        <button type="button"
+                class="btn btn-primary"
+                ng-click="vm.search()">
+          <i class="glyphicon glyphicon-search"></i>
+          &nbsp;Search
+        </button>
+        <button type="button"
+                class="btn btn-primary" 
+                ng-click="vm.resetSearch()">
+          <i class="glyphicon glyphicon-repeat"></i>
+          &nbsp;Reset
+        </button>
+      </div>
+    </div>
+    <!-- ** END SEARCH AREA ** -->
+    <!-- ** BEGIN ORDER LIST AREA ** -->
+    <div ng-show="vm.uiState.isListAreaVisible" class="table-responsive">
+      <table id="orderTable"
+             class="table table-condensed table-bordered table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Customer Name</th>
+            <th>Account Number</th>
+            <th>Ship to Address</th>
+            <th>Ship Method</th>
+            <th>SubTotal</th>
+            <th>Tax</th>
+            <th>Freight</th>
+            <th>Total</th>
+            <th class="pdsa-action-button-column">
+              Details
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="order in vm.orders | filter: vm.searchImmediate">
+            <td>{{order.CustomerName}}</td>
+            <td>{{order.CustomerAcctNo}}</td>
+            <td>{{order.ShipToAddress}}</td>
+            <td>{{order.ShipMethod}}</td>
+            <td>{{order.SubTotal | currency: '$'}}</td>
+            <td>{{order.TaxAmt | currency: '$'}}</td>
+            <td>{{order.Freight | currency: '$'}}</td>
+            <td>{{order.TotalDue | currency: '$'}}</td>
+
+            <td class="pdsa-action-button-column">
+                <button class="btn btn-default btn-sm" ng-click="vm.orderGetDetails(order.SalesOrderNumber);">
+                    {{order.SalesOrderNumber}}<i class="glyphicon glyphicon-list-alt"></i>
+                </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- ** END ORDER LIST AREA ** -->  
+
+    <!-- ** BEGIN DETAIL HEADER AREA ** -->
+    <div ng-show="vm.uiState.isDetailAreaVisible" class="panel panel-primary">
+      <div class="panel-heading">
+        <h1 class="panel-title">Sales Order Detail</h1>
+      </div>
+      <div class="panel-body">
+        <div class="form-group">
+          <table id="orderDetailTable"
+             class="table table-condensed table-bordered table-striped table-hover">
+            <thead>
+              <tr>
+                <th>ProductName</th>
+                <th>ProductID</th>
+                <th>OrderQty</th>
+                <th>UnitPrice</th>
+                <th>Discount</th>
+                <th>LineTotal</th>
+                </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="orderdetail in vm.orderdetails">
+                    <td>{{orderdetail.ProductName}}</td>
+                    <td>{{orderdetail.ProductID}}</td>
+                    <td>{{orderdetail.OrderQty}}</td>
+                    <td>{{orderdetail.UnitPrice | currency: '$'}}</td>
+                    <td>{{orderdetail.Discount | currency: '$'}}</td>
+                    <td>{{orderdetail.LineTotal | currency: '$'}}</td>
+                  </tr>
+                </tbody>
+            </table>
+        </div>
+      </div>
+      <div class="panel-footer">
+        <button type="button"
+                class="btn btn-primary"
+                ng-click="vm.backToCustomer()">
+          <i class="glyphicon glyphicon-arrow-left"></i>
+          &nbsp;Back to Customer
+        </button>
+      </div>
+    </div>
+    <!-- ** END DETAIL AREA ** -->
+
+
+
+    <!-- ** END ORDER LIST AREA ** -->  
+  </form>
+</div>
+
+@section scripts {
+    <script src="~/Scripts/angular.min.js"></script>
+    <script src="~/app/app.module.js"></script>
+    <script src="~/app/order.controller.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        //source - https://jqueryui.com/datepicker/
+        $(function () {
+            $(".datepicker").datepicker();
+        });
+    </script>
+}
+
+
+<!--<div class="row">
+    <div class="col-md-4">
+        <h2>Getting started</h2>
+        <p>
+            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
+            enables a clean separation of concerns and gives you full control over markup
+            for enjoyable, agile development.
+        </p>
+        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Get more libraries</h2>
+        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
+        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Web Hosting</h2>
+        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
+        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+    </div>
+</div>-->
